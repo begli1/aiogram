@@ -18,7 +18,7 @@ settings = InlineKeyboardMarkup(inline_keyboard= [
 cars = ['Tesla', 'BMW', 'Mercedes', 'Audi']
 
 async def get_cars_keyboard():
-    keyboard = InlineKeyboardBuilder()
+    keyboard = InlineKeyboardBuilder() #InlineKeyboardBuilder is differnt from InlineKeyboardMarkup because it allows to build the keyboard dynamically
     for car in cars:
         keyboard.add(InlineKeyboardButton(text=car, url="https://youtube.com/"))
     return keyboard.adjust(2).as_markup()
