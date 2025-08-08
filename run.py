@@ -8,7 +8,7 @@ load_dotenv()
 from aiogram import Bot, Dispatcher, F
 from app.handlers import router
 
-BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+BOT_TOKEN = os.getenv("TOKEN")
 bot = Bot(BOT_TOKEN)
 dp = Dispatcher()
 photo1 = None

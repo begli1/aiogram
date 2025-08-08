@@ -2,9 +2,18 @@ from aiogram import F, Router
 from aiogram.types import Message, ReplyKeyboardRemove, CallbackQuery
 from aiogram.filters import CommandStart, Command
 import app.keyboard as kb
-
+from aiogram.fsm.state import State, StatesGroup
+from aiogram.fsm.context import FSMContext
+from app.middleware import TestMiddleWare
 router = Router()
 
+
+
+class Reg(StatesGroup):
+    name = State()
+    number = State()
+
+router.message.middleware(TestMiddleWare())
 
 @router.message(CommandStart())
 async def start_command(message: Message):
@@ -37,3 +46,24 @@ async def catalog_callback(callback: CallbackQuery):
     # If you add show_alert=True, it will show a notification that will not disappear until you click OK. 
     await callback.message.edit_text('This is the catalog section.', reply_markup=await kb.get_cars_keyboard()) 
     # you can use answer it will send an actual message but edit_text will edit the current message like change the buttons or text. 
+
+
+@router.message(Command('reg'))
+async def reg_command1(message: Message, state: FSMContext):
+    await state.set_state(Reg.name)
+    await message.answer("Please enter your name:")
+
+
+@router.message(Reg.name)
+async def reg_command2(message: Message, state: FSMContext):
+    await state.update_data(name = message.text)
+    await state.set_state(Reg.number)
+    await message.answer("Please enter your phone number:")
+
+
+@router.message(Reg.number)
+async def reg_command3(message: Message, state: FSMContext):
+    await state.update_data(number= message.text)
+    data = await state.get_data()
+    await message.answer(f'Registration complete!\nName: {data["name"]}\nPhone Number: {data["number"]}')
+    await state.clear()
