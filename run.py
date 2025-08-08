@@ -1,12 +1,15 @@
 import asyncio
 import logging
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from aiogram import Bot, Dispatcher, F
-from config import TOKEN
 from app.handlers import router
 
-
-bot = Bot(TOKEN)
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+bot = Bot(BOT_TOKEN)
 dp = Dispatcher()
 photo1 = None
 
